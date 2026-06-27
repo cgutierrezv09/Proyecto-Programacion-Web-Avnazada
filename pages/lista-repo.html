@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Producción - Repo CENFO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/custom.css">
+   
+</head>
+
+<body>
+    <!-- Navbar -->
+     <header>
+
+        <nav class="navbar navbar-expand-lg ">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="#">Repo CENFO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="collapse navbar-collapse w-100 justify-content-between" id="navbarNavDropdown">
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active text-white" aria-current="page" href="../index.html">Inicio</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Repositorios
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Lista de Repositorios</a>
+                                </li>
+                                <li><a class="dropdown-item" data-roles="admin,docentes" href="registro-repo.html">Registrar
+                                        Repositorios</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown" data-roles="admin">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Mantenimiento
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                                <li><a class="dropdown-item" href="#">Tipos de produccion</a></li>
+                                <li><a class="dropdown-item" href="#">Categorías</a></li>
+                                <li><a class="dropdown-item" href="#">Áreas de Conocimiento</a></li>
+                                <li><a class="dropdown-item" href="#">Tecnologias</a></li>
+                                <li><a class="dropdown-item" href="#">Tipos de investigacion</a></li>
+                                <li><a class="dropdown-item" href="#">Carreras</a></li>
+                                <li><a class="dropdown-item" href="#">Lineas de Investigación</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                    <div class="dropdown text-end mx-3">
+                        <a href="#"
+                            class="nav-perfil d-block link-dark text-decoration-none dropdown-toggle d-flex align-items-center"
+                            id="dropdownRoles" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center text-white text-uppercase"
+                                style="width: 40px; height: 40px; font-weight: bold; background-color: #6f42c1;">
+                                C
+                            </div>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm text-center"
+                            aria-labelledby="dropdownRoles" style="min-width: 180px;">
+                            <li class="dropdown-header text-start border-bottom pb-2 mb-1 fw-bold text-white">Roles
+                                disponibles</li>
+                            <li
+                                class="dropdown-header rol-actual text-start border-bottom pb-2 mb-1 fw-bold text-white">
+                                Rol Actual:</li>
+                            <li class="my-2 px-3">
+                                <span class="btn  btn-admin py-2 fs-6" id="btn-admin">Administrador</span>
+                            </li>
+                            <li class="my-2 px-3">
+                                <span class="btn  btn-docente py-2 fs-6" id="btn-docente">Docente</span>
+                            </li>
+                            <li class="my-2 px-3">
+                                <span class="btn  btn-estudiante py-2 fs-6" id="btn-estudiante">Estudiante</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="container-lg mt-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Producción Académica</h1>
+            <a href="./registro-repo.html"><button class="btn btn-primary" data-roles="admin,docente" href="../pages/registro-repo.html">
+                <i class="fas fa-plus"></i> Registrar Nueva
+            </button></a>
+        </div>
+
+        <div class="container-fluid-custom">
+            <!-- ASIDE - Filtros -->
+            <aside class="aside-filtros">
+                <h5 class="mb-4">Filtros</h5>
+
+                <!-- Búsqueda -->
+                <div class="filtro-grupo">
+                    <h6>Buscar</h6>
+                    <input type="text" id="buscar" class="form-control form-control-sm" placeholder="Título o autor...">
+                </div>
+
+                <!-- Tipo de Producción -->
+                <div class="filtro-grupo">
+                    <h6>Tipo</h6>
+                    <label><input type="checkbox" class="filtro-tipo" value="Tesis"> Tesis</label>
+                    <label><input type="checkbox" class="filtro-tipo" value="Artículo"> Artículo</label>
+                    <label><input type="checkbox" class="filtro-tipo" value="Investigación"> Investigación</label>
+                    <label><input type="checkbox" class="filtro-tipo" value="Caso de Estudio"> Caso de Estudio</label>
+                    <label><input type="checkbox" class="filtro-tipo" value="Propuesta"> Propuesta</label>
+                </div>
+
+                <!-- Carrera -->
+                <div class="filtro-grupo">
+                    <h6>Carrera</h6>
+                    <label><input type="checkbox" class="filtro-carrera" value="Ingeniería en Software"> Software</label>
+                    <label><input type="checkbox" class="filtro-carrera" value="Ingeniería en Sistemas Computacionales"> Sistemas</label>
+                    <label><input type="checkbox" class="filtro-carrera" value="Administración de TI"> Admin TI</label>
+                    <label><input type="checkbox" class="filtro-carrera" value="Ciberseguridad"> Ciberseguridad</label>
+                    <label><input type="checkbox" class="filtro-carrera" value="Análisis de Datos"> Análisis Datos</label>
+                </div>
+
+                <!-- Área -->
+                <div class="filtro-grupo">
+                    <h6>Área de Conocimiento</h6>
+                    <label><input type="checkbox" class="filtro-area" value="Ingeniería de Software"> Ingeniería Software</label>
+                    <label><input type="checkbox" class="filtro-area" value="Ciberseguridad"> Ciberseguridad</label>
+                    <label><input type="checkbox" class="filtro-area" value="Sistemas Distribuidos"> Sist. Distribuidos</label>
+                    <label><input type="checkbox" class="filtro-area" value="Análisis de Datos"> Análisis Datos</label>
+                    <label><input type="checkbox" class="filtro-area" value="Desarrollo Móvil"> Desarrollo Móvil</label>
+                </div>
+
+                <!-- Año -->
+                <div class="filtro-grupo">
+                    <h6>Año</h6>
+                    <label><input type="checkbox" class="filtro-año" value="2026"> 2026</label>
+                    <label><input type="checkbox" class="filtro-año" value="2025"> 2025</label>
+                    <label><input type="checkbox" class="filtro-año" value="2024"> 2024</label>
+                    <label><input type="checkbox" class="filtro-año" value="2023"> 2023</label>
+                </div>
+
+                <button class="btn btn-outline-secondary btn-limpiar-filtros" id="limpiar-filtros">
+                    <i class="fas fa-times"></i> Limpiar Filtros
+                </button>
+            </aside>
+
+            <!-- MAIN - Tabla -->
+            <main class="main-content">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Título</th>
+                                <th>Tipo</th>
+                                <th>Autor</th>
+                                <th>Carrera</th>
+                                <th>Área</th>
+                                <th>Año</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-produccion">
+                            <!-- Se llena dinámicamente con JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                <nav aria-label="Paginación">
+                    <ul class="pagination justify-content-center" id="paginacion">
+                        <!-- Se llena dinámicamente -->
+                    </ul>
+                </nav>
+
+                <!-- Mensaje si no hay resultados -->
+                <div id="sin-resultados" class="alert alert-info text-center d-none mt-4">
+                    <i class="fas fa-search"></i> No se encontraron registros con los filtros seleccionados.
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white mt-5" style="background-color: #3f51b5;">
+        <div class="container">
+            <section class="pt-5">
+                <div class="row text-center justify-content-center">
+                    <div class="col-md-auto">
+                        <h6 class="text-uppercase fw-bold">
+                            <a href="../index.html" class="text-white link text-decoration-none">Inicio</a>
+                        </h6>
+                    </div>
+                    <div class="col-md-auto">
+                        <h6 class="text-uppercase fw-bold">
+                            <a href="lista-repo.html" class="text-white link text-decoration-none">Repositorios</a>
+                        </h6>
+                    </div>
+                    <div class="col-md-auto">
+                        <h6 class="text-uppercase fw-bold">
+                            <a href="#" class="text-white link text-decoration-none" data-roles="admin">Mantenimiento</a>
+                        </h6>
+                    </div>
+                </div>
+            </section>
+            <hr class="my-4">
+            <section class="mb-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <p>Repo CENFO es la plataforma oficial de producción académica de la Universidad CENFOTEC.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="text-center p-3" style="background-color: rgba(0,0,0,0.2);">
+            © 2025 Universidad CENFOTEC — Todos los derechos reservados
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="../js/data.js"></script>
+    <script src="../js/utils.js"></script>
+    
+</body>
+
+</html>

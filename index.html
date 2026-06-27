@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Respositorio CENFOTEC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <!--Navabar con con listas que colapsan -->
+    <header>
+
+        <nav class="navbar navbar-expand-lg ">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white" href="#">Repo CENFO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+
+                <div class="collapse navbar-collapse w-100 justify-content-between" id="navbarNavDropdown">
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active text-white" aria-current="page" href="#">Inicio</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Repositorios
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="./pages/lista-repo.html">Lista de Repositorios</a>
+                                </li>
+                                <li><a class="dropdown-item" data-roles="admin,docentes" href="./pages/registro-repo.html">Registrar
+                                        Repositorios</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown" data-roles="admin">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Mantenimiento
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Usuarios</a></li>
+                                <li><a class="dropdown-item" href="#">Tipos de produccion</a></li>
+                                <li><a class="dropdown-item" href="#">Categorías</a></li>
+                                <li><a class="dropdown-item" href="#">Áreas de Conocimiento</a></li>
+                                <li><a class="dropdown-item" href="#">Tecnologias</a></li>
+                                <li><a class="dropdown-item" href="#">Tipos de investigacion</a></li>
+                                <li><a class="dropdown-item" href="#">Carreras</a></li>
+                                <li><a class="dropdown-item" href="#">Lineas de Investigación</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+                    <div class="dropdown text-end mx-3">
+                        <a href="#"
+                            class="nav-perfil d-block link-dark text-decoration-none dropdown-toggle d-flex align-items-center"
+                            id="dropdownRoles" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center text-white text-uppercase"
+                                style="width: 40px; height: 40px; font-weight: bold; background-color: #6f42c1;">
+                                C
+                            </div>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm text-center"
+                            aria-labelledby="dropdownRoles" style="min-width: 180px;">
+                            <li class="dropdown-header text-start border-bottom pb-2 mb-1 fw-bold text-white">Roles
+                                disponibles</li>
+                            <li
+                                class="dropdown-header rol-actual text-start border-bottom pb-2 mb-1 fw-bold text-white">
+                                Rol Actual:</li>
+                            <li class="my-2 px-3">
+                                <span class="btn  btn-admin py-2 fs-6" id="btn-admin">Administrador</span>
+                            </li>
+                            <li class="my-2 px-3">
+                                <span class="btn  btn-docente py-2 fs-6" id="btn-docente">Docente</span>
+                            </li>
+                            <li class="my-2 px-3">
+                                <span class="btn  btn-estudiante py-2 fs-6" id="btn-estudiante">Estudiante</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+
+    <!--Bienvenida -->
+    <section class="container my-5">
+        <h1 class="text-center">Repo CENFO</h1>
+
+        <p class="text-center mt-5 fs-4">
+            Bienvenidos a Repo CENFO, el repositorio institucional de la Universidad CENFOTEC.
+            Esta plataforma centraliza la producción académica generada por estudiantes, docentes
+            e investigadores, permitiendo consultar tesis, artículos e investigaciones de forma
+            rápida y organizada. Explorá el contenido disponible, filtrá por área de conocimiento
+            o carrera, y descubrí el trabajo académico que se desarrolla dentro de nuestra comunidad.
+        </p>
+    </section>
+
+
+    <section class="container my-5 ">
+        <h2 class="mb-5">Total de colecciones</h2>
+
+        <div class="row row  row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div class="col">
+                <div class="card card-coleccion">
+                    <div class="card-body">
+                        <h5 class="card-title">Tesis</h5>
+                        <p class="card-text">La cantidad total de tesis es <b data-indicador="tesis">0</b></p>
+                        <a href="./pages/lista-repo.html" class="btn btn-primary" id="btn-tesis">Tesis</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card card-coleccion">
+                    <div class="card-body">
+                        <h5 class="card-title">Articulos</h5>
+                        <p class="card-text">La cantidad total de articulos es <b data-indicador="articulos">0</b></p>
+                        <a href="./pages/lista-repo.html" class="btn btn-primary">Articulos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card card-coleccion">
+                    <div class="card-body">
+                        <h5 class="card-title">Investigacion</h5>
+                        <p class="card-text">La cantidad total de investigaciones es <b data-indicador="investigacion">0</b></p>
+                        <a href="./pages/lista-repo.html" class="btn btn-primary">Investigacion</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card card-coleccion">
+                    <div class="card-body">
+                        <h5 class="card-title">Relacionados con la IA</h5>
+                        <p class="card-text">La cantidad total de IA es <b data-indicador="ia">0</b></p>
+                        <a href="./pages/lista-repo.html" class="btn btn-primary">IA</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--section del buscador de los repos -->
+    <h2 class="text-center my-5">Busca los mejores articulos aca</h2>
+    <section class="container mt-5 d-flex justify-content-center ">
+
+
+
+        <div class="buscador">
+            <form class="d-flex buscador" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                <button class="btn btn-outline-primary" type="submit">Buscar</button>
+            </form>
+        </div>
+
+    </section>
+
+    <!-- Envíos recientes -->
+    <section class="container mt-5 mb-5">
+        <h2 class="mb-4">Envíos recientes</h2>
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-auto d-flex align-items-center p-3">
+                    <img src="https://image.slidesharecdn.com/trabajodezamorita-150415132321-conversion-gate02/85/documentos-informativo-carta-memorandum-oficio-vitacora-curriculum-etc-1-320.jpg"
+                        class="img-fluid rounded" style="width: 100px; height: 130px; object-fit: cover;"
+                        alt="Portada documento">
+                </div>
+                <div class="col">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Ítem</span>
+                        <h5 class="card-title">
+                            <a href="#" class="text-decoration-none">
+                                Munipcialidad y fecundidad en cuatro zonas rurales de América Latina
+                            </a>
+                        </h5>
+                        <p class="text-muted small mb-1">(CELADE, 1978) Rosero Bixby, Luis</p>
+                        <p class="card-text text-truncate" style="max-width: 800px;">
+                            El presente trabajo constituye un análisis descriptivo de la nupcialidad
+                            y de su influencia en la fecundidad.
+                        </p>
+
+                        <div class="collapse" id="mas-item-1">
+                            <p class="card-text mt-2">
+                                Este estudio fue realizado en el marco del programa PECFAL-Rural,
+                                abarcando cuatro zonas rurales representativas de América Latina.
+                                Los resultados muestran patrones claros de relación entre nupcialidad
+                                y niveles de fecundidad en poblaciones rurales.
+                            </p>
+
+                        </div>
+
+                        <a class="text-primary small text-decoration-none" data-bs-toggle="collapse" href="#mas-item-1"
+                            role="button" aria-expanded="false" id="toggle-mas-1" onclick="toggleMas1(this)">
+                            ∨ Más...
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-5">
+            <div class="row g-0">
+                <div class="col-auto d-flex align-items-center p-3">
+                    <img src="https://modelosdocu.com/wp-content/uploads/2024/12/carta-compromiso-de-entrega-de-documentos.jpg"
+                        class="img-fluid rounded" style="width: 100px; height: 130px; object-fit: cover;"
+                        alt="Portada documento">
+                </div>
+                <div class="col">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Ítem</span>
+                        <h5 class="card-title">
+                            <a href="#" class="text-decoration-none">
+                                Implementación de algoritmos de machine learning para la detección de fraude financiero
+                            </a>
+                        </h5>
+                        <p class="text-muted small mb-1">(CENFOTEC, 2024) Mora Jiménez, Andrea</p>
+                        <p class="card-text text-truncate" style="max-width: 900px;">
+                            Este proyecto analiza el comportamiento de transacciones bancarias mediante modelos
+                            supervisados de clasificación.
+                        </p>
+
+                        <div class="collapse" id="mas-item-2">
+                            <p class="card-text mt-2">
+                                Se utilizaron algoritmos como Random Forest y SVM sobre un dataset de 50,000
+                                transacciones.
+                                Los resultados muestran una precisión del 94% en la detección de transacciones
+                                fraudulentas en tiempo real.
+                            </p>
+
+                        </div>
+
+                        <a class="text-primary small text-decoration-none" data-bs-toggle="collapse" href="#mas-item-2"
+                            role="button" aria-expanded="false" id="toggle-mas-2" onclick="toggleMas2(this)">
+                            ∨ Más...
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-5">
+            <div class="row g-0">
+                <div class="col-auto d-flex align-items-center p-3">
+                    <img src="https://img.yumpu.com/29938611/1/500x640/tipos-de-documentos-icao.jpg"
+                        class="img-fluid rounded" style="width: 100px; height: 130px; object-fit: cover;"
+                        alt="Portada documento">
+                </div>
+                <div class="col">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Ítem</span>
+                        <h5 class="card-title">
+                            <a href="#" class="text-decoration-none">
+                                Diseño de una arquitectura de microservicios para sistemas de salud en Costa Rica
+                            </a>
+                        </h5>
+                        <p class="text-muted small mb-1">(CENFOTEC, 2023) Vargas Solano, Diego; Pérez Ulate, Sofía</p>
+                        <p class="card-text text-truncate" style="max-width: 800px;">
+                            Propuesta de arquitectura distribuida para la gestión de expedientes médicos electrónicos en
+                            clínicas privadas.
+                        </p>
+
+                        <div class="collapse" id="mas-item-3">
+                            <p class="card-text mt-2">
+                                La solución implementa contenedores Docker y orquestación con Kubernetes, logrando una
+                                reducción del 60% en tiempos de respuesta comparado con el sistema monolítico anterior.
+
+
+                            </p>
+
+                        </div>
+
+                        <a class="text-primary small text-decoration-none" data-bs-toggle="collapse" href="#mas-item-3"
+                            role="button" aria-expanded="false" id="toggle-mas-3" onclick="toggleMas3(this)">
+                            ∨ Más...
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card mt-5">
+            <div class="row g-0">
+                <div class="col-auto d-flex align-items-center p-3">
+                    <img src="https://imgv2-1-f.scribdassets.com/img/document/478644156/original/603876078d/1?v=1"
+                        class="img-fluid rounded" style="width: 100px; height: 130px; object-fit: cover;"
+                        alt="Portada documento">
+                </div>
+                <div class="col">
+                    <div class="card-body">
+                        <span class="badge bg-primary mb-2">Ítem</span>
+                        <h5 class="card-title">
+                            <a href="#" class="text-decoration-none">
+                                Análisis de vulnerabilidades en aplicaciones web desarrolladas con frameworks modernos
+                            </a>
+                        </h5>
+                        <p class="text-muted small mb-1">(CENFOTEC, 2025) Chinchilla Rojas, Marco</p>
+                        <p class="card-text text-truncate" style="max-width: 800px;">
+                            Estudio comparativo de vulnerabilidades OWASP Top 10 en aplicaciones construidas con React,
+                            Angular y Vue.
+                        </p>
+
+                        <div class="collapse" id="mas-item-4">
+                            <p class="card-text mt-2">
+                                Se realizaron pruebas de penetración sobre 15 aplicaciones reales. Angular presentó
+                                menor cantidad de vulnerabilidades XSS mientras que React mostró mejores resultados
+                                contra ataques de inyección.
+                            </p>
+
+                        </div>
+
+                        <a class="text-primary small text-decoration-none" data-bs-toggle="collapse" href="#mas-item-4"
+                            role="button" aria-expanded="false" id="toggle-mas-4" onclick="toggleMas4(this)">
+                            ∨ Más...
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="text-white mt-5 footer">
+        <div class="container">
+
+            <!-- Links -->
+            <section class="pt-5">
+                <div class="row text-center justify-content-center">
+                    <div class="col-md-auto">
+                        <h6 class="text-uppercase fw-bold">
+                            <a href="index.html" class="text-white link text-decoration-none">Inicio</a>
+                        </h6>
+                    </div>
+                    <div class="col-md-auto">
+                        <h6 class="text-uppercase fw-bold">
+                            <a href="./pages/lista-repo.html" class="text-white link text-decoration-none">Repositorios</a>
+                        </h6>
+                    </div>
+                    <div class="col-md-auto">
+                        <h6 class="text-uppercase fw-bold">
+                            <a href="#" class="text-white link text-decoration-none"
+                                data-roles="admin">Mantenimiento</a>
+                        </h6>
+                    </div>
+
+                </div>
+            </section>
+
+            <hr class="my-4">
+
+            <!-- Descripción -->
+            <section class="mb-4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <p>Repo CENFO es la plataforma oficial de producción académica de la Universidad CENFOTEC.
+                            Aquí encontrás tesis, artículos e investigaciones generadas por estudiantes,
+                            docentes e investigadores de la institución.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Redes sociales -->
+            <section class="text-center mb-4">
+                <a href="#" class="text-white link me-4"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white link me-4"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white link me-4"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white link me-4"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-white link me-4"><i class="fab fa-github"></i></a>
+            </section>
+
+        </div>
+
+        <!-- Copyright -->
+        <div class="text-center p-3 copyright">
+            © 2025 Universidad CENFOTEC — Todos los derechos reservados
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/data.js"></script>
+    
+</body>
+
+</html>
