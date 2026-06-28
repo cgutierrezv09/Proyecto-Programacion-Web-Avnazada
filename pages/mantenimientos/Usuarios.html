@@ -28,7 +28,7 @@
 
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active text-white" aria-current="page" href="../index.html">Inicio</a>
+                            <a class="nav-link active text-white" aria-current="page" href="../../index.html">Inicio</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button"
@@ -36,9 +36,9 @@
                                 Repositorios
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Lista de Repositorios</a>
+                                <li><a class="dropdown-item" href="../lista-repo.html">Lista de Repositorios</a>
                                 </li>
-                                <li><a class="dropdown-item" data-roles="admin,docentes" href="registro-repo.html">Registrar
+                                <li><a class="dropdown-item" data-roles="admin,docentes" href="../registro-repo.html">Registrar
                                         Repositorios</a></li>
                             </ul>
                         </li>
@@ -50,13 +50,13 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#">Usuarios</a></li>
-                                <li><a class="dropdown-item" href="#">Tipos de produccion</a></li>
-                                <li><a class="dropdown-item" href="#">Categorías</a></li>
-                                <li><a class="dropdown-item" href="#">Áreas de Conocimiento</a></li>
-                                <li><a class="dropdown-item" href="#">Tecnologias</a></li>
-                                <li><a class="dropdown-item" href="#">Tipos de investigacion</a></li>
-                                <li><a class="dropdown-item" href="#">Carreras</a></li>
-                                <li><a class="dropdown-item" href="#">Lineas de Investigación</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/produccion.html">Tipos de produccion</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/categorias.html">Categorías</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/areas.html">Áreas de Conocimiento</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/tecnologias.html">Tecnologias</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/investigacion.html">Tipos de investigacion</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/carreras.html">Carreras</a></li>
+                                <li><a class="dropdown-item" href="../mantenimientos/lineas-investigacion.html">Lineas de Investigación</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -91,8 +91,49 @@
     </header>
 
 
+      <h2 class="text-center my-5">Mantenimiento de Usuarios</h2>
+<section class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+            <input type="text" id="buscar" class="form-control form-control-md mb-5" placeholder="Nombre o correo...">
+        </div>
+    </div>
+</section>
 
+  <main class="main-content ">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead class="table-light">
+                            <tr >
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                        
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-produccion">
+                            <!-- Se llena dinámicamente con JS -->
+                        </tbody>
+                    </table>
+                </div>
 
+                <!-- Paginación -->
+                <nav aria-label="Paginación">
+                    <ul class="pagination justify-content-center" id="paginacion">
+                        <!-- Se llena dinámicamente -->
+                    </ul>
+                </nav>
+
+                <!-- Mensaje si no hay resultados -->
+                <div id="sin-resultados" class="alert alert-info text-center d-none mt-4">
+                    <i class="fas fa-search"></i> No se encontraron usuarios con los filtros seleccionados.
+                </div>
+            </main>
+        </div>
+    </div>
 
 
 
@@ -110,7 +151,7 @@
                     </div>
                     <div class="col-md-auto">
                         <h6 class="text-uppercase fw-bold">
-                            <a href="lista-repo.html" class="text-white link text-decoration-none">Repositorios</a>
+                            <a href="../lista-repo.html" class="text-white link text-decoration-none">Repositorios</a>
                         </h6>
                     </div>
                     <div class="col-md-auto">
@@ -157,7 +198,9 @@
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    <script src="../../js/mantenimientos.js"></script>
+        <script src="../../js/data.js"></script>
+    <script src="../../js/usuarios.js"></script>
+    
     
     
 </body>

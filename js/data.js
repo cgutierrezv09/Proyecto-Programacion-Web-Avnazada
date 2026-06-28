@@ -1,54 +1,60 @@
 
 // USUARIOS
 
-const usuarios = [
-    { id: 1, nombre: 'Andrea Mora', email: 'andrea.mora@cenfotec.ac.cr', rol: 'docente', estado: 'activo' },
-    { id: 2, nombre: 'Diego Vargas', email: 'diego.vargas@cenfotec.ac.cr', rol: 'docente', estado: 'activo' },
-    { id: 3, nombre: 'Marco Chinchilla', email: 'marco.chinchilla@cenfotec.ac.cr', rol: 'estudiante', estado: 'activo' },
-    { id: 4, nombre: 'Sofia Pérez', email: 'sofia.perez@cenfotec.ac.cr', rol: 'docente', estado: 'activo' },
-    { id: 5, nombre: 'Luis Rosero', email: 'luis.rosero@cenfotec.ac.cr', rol: 'estudiante', estado: 'activo' },
-    { id: 6, nombre: 'Camila Piedra', email: 'camila.piedra@cenfotec.ac.cr', rol: 'estudiante', estado: 'inactivo' },
+let usuarios = [
+    { id: 1, nombre: 'Cristopher Vega', email: 'cvega@cenfotec.ac.cr', rol: 'administrador', estado: 'activo' },
+    { id: 2, nombre: 'Andrea Mora', email: 'andrea.mora@cenfotec.ac.cr', rol: 'docente', estado: 'activo' },
+    { id: 3, nombre: 'Diego Vargas', email: 'diego.vargas@cenfotec.ac.cr', rol: 'docente', estado: 'activo' },
+    { id: 4, nombre: 'Marco Chinchilla', email: 'marco.chinchilla@cenfotec.ac.cr', rol: 'estudiante', estado: 'activo' },
+    { id: 5, nombre: 'Sofia Pérez', email: 'sofia.perez@cenfotec.ac.cr', rol: 'docente', estado: 'activo' },
+    { id: 6, nombre: 'Luis Rosero', email: 'luis.rosero@cenfotec.ac.cr', rol: 'estudiante', estado: 'activo' },
+    { id: 7, nombre: 'Camila Piedra', email: 'camila.piedra@cenfotec.ac.cr', rol: 'estudiante', estado: 'inactivo' },
+    
 ];
 
 
 // TIPOS DE PRODUCCIÓN ACADÉMICA
 
-const tiposProduccion = [
+let tiposProduccion = [
     { id: 1, nombre: 'Tesis', descripcion: 'Trabajo de investigación para grado académico' },
     { id: 2, nombre: 'Artículo', descripcion: 'Artículo académico publicado o en revisión' },
     { id: 3, nombre: 'Investigación', descripcion: 'Proyecto de investigación completo' },
     { id: 4, nombre: 'Caso de Estudio', descripcion: 'Análisis detallado de un caso específico' },
     { id: 5, nombre: 'Propuesta', descripcion: 'Propuesta de proyecto o producto' },
+     { id: 6, nombre: 'Tesis', descripcion: 'Trabajo de investigación para grado académico con IA' },
+     { id: 7, nombre: 'Examenes', descripcion: 'Examenes de años pasados realizados por los estudiantes' },
 ];
 
 
 // CATEGORÍAS
 
-const categorias = [
+let categorias = [
     { id: 1, nombre: 'Desarrollo Web' },
     { id: 2, nombre: 'Seguridad Informática' },
     { id: 3, nombre: 'Base de Datos' },
     { id: 4, nombre: 'Inteligencia Artificial' },
     { id: 5, nombre: 'DevOps' },
     { id: 6, nombre: 'Metodologías Ágiles' },
+    { id: 7, nombre: 'Scrum Master' },
 ];
 
 
 // ÁREAS DE CONOCIMIENTO
 
-const areasConocimiento = [
+let areasConocimiento = [
     { id: 1, nombre: 'Ingeniería de Software' },
     { id: 2, nombre: 'Ciberseguridad' },
     { id: 3, nombre: 'Sistemas Distribuidos' },
     { id: 4, nombre: 'Análisis de Datos' },
     { id: 5, nombre: 'Desarrollo Móvil' },
     { id: 6, nombre: 'Cloud Computing' },
+    { id: 7, nombre: 'Ciencia de datos' }
 ];
 
 
 // TECNOLOGÍAS
 
-const tecnologias = [
+let tecnologias = [
     { id: 1, nombre: 'JavaScript' },
     { id: 2, nombre: 'React' },
     { id: 3, nombre: 'Node.js' },
@@ -66,7 +72,7 @@ const tecnologias = [
 
 // TIPOS DE INVESTIGACIÓN
 
-const tiposInvestigacion = [
+let tiposInvestigacion = [
     { id: 1, nombre: 'Investigación Básica' },
     { id: 2, nombre: 'Investigación Aplicada' },
     { id: 3, nombre: 'Desarrollo Experimental' },
@@ -75,7 +81,7 @@ const tiposInvestigacion = [
 ];
 
 // CARRERAS
-const carreras = [
+let carreras = [
     { id: 1, nombre: 'Ingeniería en Software' },
     { id: 2, nombre: 'Ingeniería en Sistemas Computacionales' },
     { id: 3, nombre: 'Administración de TI' },
@@ -86,7 +92,7 @@ const carreras = [
 
 // LÍNEAS DE INVESTIGACIÓN
 
-const lineasInvestigacion = [
+let lineasInvestigacion = [
     { id: 1, nombre: 'Seguridad en Aplicaciones Web' },
     { id: 2, nombre: 'Arquitecturas de Software Escalables' },
     { id: 3, nombre: 'Machine Learning en Costa Rica' },
