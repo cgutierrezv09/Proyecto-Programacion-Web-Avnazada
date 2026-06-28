@@ -154,7 +154,7 @@ const aplicarBusqueda = () => {
 
 
 
-// Eliminar usuario (simulado)
+// Eliminar usuario
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
