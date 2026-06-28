@@ -1,4 +1,6 @@
+
 let rolActual = localStorage.getItem('rol') || 'admin';
+
 const aplicarRol = (rol) => {
     const elementos = document.querySelectorAll('[data-roles]');
 
@@ -14,8 +16,8 @@ const aplicarRol = (rol) => {
         }
     });
 };
-document.addEventListener('DOMContentLoaded', function () {
 
+document.addEventListener('DOMContentLoaded', function () {
     // Función para mostrar el rol actual
     const mostrarRolActual = (rol) => {
         const rolActualEl = document.querySelector('.rol-actual');
@@ -29,9 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const btnAdmin = document.getElementById('btn-admin');
- 
-
-    // Event listeners para los botones de rol
 
     if (btnAdmin) {
         btnAdmin.addEventListener('click', function () {
@@ -44,8 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
-
     // Aplicar el rol al cargar
     aplicarRol(rolActual);
     mostrarRolActual(rolActual);
@@ -53,9 +50,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+// GESTIÓN DE LOCALSTORAGE PARA TIPOS DE INVESTIGACIÓN
+
+
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;
-let investigacionesFiltradas = [...tiposInvestigacion];
+
+// 1. Inicializar la lista obteniendo los datos guardados de LocalStorage.
+// Si está vacío, usa el arreglo 'tiposInvestigacion' global existente por defecto.
+let tiposInvestigacionBase = JSON.parse(localStorage.getItem('tiposInvestigacion')) || (typeof tiposInvestigacion !== 'undefined' ? tiposInvestigacion : []);
+
+// Si no existía la clave en LocalStorage, la guardamos por primera vez
+if (!localStorage.getItem('tiposInvestigacion')) {
+    localStorage.setItem('tiposInvestigacion', JSON.stringify(tiposInvestigacionBase));
+}
+
+let investigacionesFiltradas = [...tiposInvestigacionBase];
 
 
 const renderizarTabla = () => {
@@ -84,14 +94,12 @@ const renderizarTabla = () => {
         <tr>
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            
-              <td>
+            <td>
                  <button class="btn btn-danger" data-roles="admin" title="Eliminar" onclick="mostrarModalEliminar(${JSON.stringify(registro).replace(/"/g, '&quot;')})">
                         <i class="fas fa-trash"></i>
-                    </button>
+                 </button>
             </td>
         </tr>
-        
         `;
         tabla.innerHTML += fila;
     });
@@ -145,7 +153,7 @@ const cambiarPagina = (nuevaPagina) => {
 // Búsqueda
 const aplicarBusqueda = () => {
     const busqueda = document.getElementById('buscar').value.toLowerCase();
-    investigacionesFiltradas = tiposInvestigacion.filter(u => 
+    investigacionesFiltradas = tiposInvestigacionBase.filter(u => 
         u.nombre.toLowerCase().includes(busqueda)
     );
     paginaActual = 1;
@@ -153,8 +161,7 @@ const aplicarBusqueda = () => {
 };
 
 
-
-// Eliminar usuario
+// Eliminar Investigación (Persistente en LocalStorage)
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -180,7 +187,7 @@ const eliminarModal = (registro) => {
     const modalBody = document.createElement('div');
     modalBody.className = 'modal-body';
     modalBody.innerHTML = `
-        <p class="mb-2"><strong>¿Deseas eliminar esta Investigacion?</strong></p>
+        <p class="mb-2"><strong>¿Deseas eliminar esta Investigación?</strong></p>
         <p class="text-muted small mb-0">${registro.nombre}</p>
     `;
 
@@ -220,12 +227,16 @@ const mostrarModalEliminar = (registro) => {
 
     const btnEliminar = modal.querySelector('.btn-danger');
     btnEliminar.addEventListener('click', function () {
-        tiposInvestigacion = tiposInvestigacion.filter(r => r.id !== registro.id);
+        // Filtrar de las colecciones en memoria
+        tiposInvestigacionBase = tiposInvestigacionBase.filter(r => r.id !== registro.id);
         investigacionesFiltradas = investigacionesFiltradas.filter(r => r.id !== registro.id);
+
+        // ACTUALIZAR LOCALSTORAGE AL ELIMINAR
+        localStorage.setItem('tiposInvestigacion', JSON.stringify(tiposInvestigacionBase));
 
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Area eliminada correctamente');
+        alert('Investigación eliminada correctamente');
         modal.remove();
     });
 };
@@ -241,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Modal para crear una area
+// Modal para crear un Tipo de Investigación (Persistente en LocalStorage)
 const crearModalAgregar = () => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -258,7 +269,7 @@ const crearModalAgregar = () => {
 
     const modalTitle = document.createElement('h5');
     modalTitle.className = 'modal-title';
-    modalTitle.textContent = 'Agregar Tipo de Producción';
+    modalTitle.textContent = 'Agregar Tipo de Investigación';
 
     const modalBtnCerrar = document.createElement('button');
     modalBtnCerrar.className = 'btn-close btn-close-white';
@@ -271,7 +282,6 @@ const crearModalAgregar = () => {
             <label for="nombre" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="nombre" placeholder="Ej: Estudio de Caso">
         </div>
-        
     `;
 
     const modalFooter = document.createElement('div');
@@ -317,24 +327,24 @@ const mostrarModalAgregar = () => {
             return;
         }
 
-        // Generar nuevo ID
-        const nuevoId = Math.max(...tiposInvestigacion.map(t => t.id), 0) + 1;
+        // Generar nuevo ID de forma dinámica usando el arreglo persistido
+        const nuevoId = Math.max(...tiposInvestigacionBase.map(t => t.id), 0) + 1;
 
-        // Crear nuevo registro
         const nuevoRegistro = {
             id: nuevoId,
             nombre: nombre,
         };
 
-        // Agregar a la lista
-        tiposInvestigacion.push(nuevoRegistro);
-        investigacionesFiltradas = [...tiposInvestigacion];
+        // Agregar a la lista local en memoria
+        tiposInvestigacionBase.push(nuevoRegistro);
+        investigacionesFiltradas = [...tiposInvestigacionBase];
 
-        // Cerrar modal
+        // GUARDAR EN LOCALSTORAGE AL AGREGAR
+        localStorage.setItem('tiposInvestigacion', JSON.stringify(tiposInvestigacionBase));
+
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Investigacion agregada correctamente');
+        alert('Investigación agregada correctamente');
         modal.remove();
     });
 };
-

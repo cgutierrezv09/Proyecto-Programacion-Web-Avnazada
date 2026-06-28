@@ -1,37 +1,36 @@
+
 let rolActual = localStorage.getItem('rol') || 'admin';
+
 const aplicarRol = (rol) => {
+    // querySelectorAll devuelve una lista con todos los elementos que tengan el atributo [data-roles]
     const elementos = document.querySelectorAll('[data-roles]');
 
     elementos.forEach(element => {
+     
         const rolesPermitidos = element.getAttribute('data-roles')
-            .split(',')
-            .map(r => r.trim());
+            .split(',') // rompe el string por medio de una coma y lo convierte en array
+            .map(r => r.trim()); // map recorre el ese array y el trim lo deja limpio con una coma
 
+        // .includes() comprueba si el rol actual del usuario existe dentro del Array de roles permitidos
         if (rolesPermitidos.includes(rol)) {
-            element.classList.remove('d-none');
+            element.classList.remove('d-none'); // Muestra el elemento (quita clase oculta de Bootstrap)
         } else {
-            element.classList.add('d-none');
+            element.classList.add('d-none');    // Oculta el elemento (añade clase d-none de Bootstrap)
         }
     });
 };
-document.addEventListener('DOMContentLoaded', function () {
 
-    // Función para mostrar el rol actual
+document.addEventListener('DOMContentLoaded', function () {
     const mostrarRolActual = (rol) => {
         const rolActualEl = document.querySelector('.rol-actual');
-        if (!rolActualEl) return; // Evita error si no existe el elemento
+        if (!rolActualEl) return; 
         
-        const roles = {
-            'admin': 'Administrador',
-        };
+        const roles = { 'admin': 'Administrador' };
         rolActualEl.textContent = `Rol Actual: ${roles[rol]}`;
         rolActualEl.style.display = 'block';
     };
 
     const btnAdmin = document.getElementById('btn-admin');
- 
-
-    // Event listeners para los botones de rol
 
     if (btnAdmin) {
         btnAdmin.addEventListener('click', function () {
@@ -44,18 +43,30 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
-
-    // Aplicar el rol al cargar
     aplicarRol(rolActual);
     mostrarRolActual(rolActual);
 });
 
 
 
+// GESTIÓN DE LOCALSTORAGE PARA LÍNEAS DE INVESTIGACIÓN
+
+
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;
-let lineasInvestigacionFiltradas= [...lineasInvestigacion];
+
+
+//Si no hay nada guardado (devuelve null), el operador lógico `||` evalúa la siguiente opción: 
+//Verifica si existe la variable global 'lineasInvestigacion' y la asigna; si no, inicializa un Array vacío `[]`.
+let lineasInvestigacionBase = JSON.parse(localStorage.getItem('lineasInvestigacion')) || (typeof lineasInvestigacion !== 'undefined' ? lineasInvestigacion : []); // si es diferente a undefined devuelve el ARRAY
+
+// Si es la primera vez que se carga la app y no existía la clave, la creamos en LocalStorage
+if (!localStorage.getItem('lineasInvestigacion')) {
+    localStorage.setItem('lineasInvestigacion', JSON.stringify(lineasInvestigacionBase));
+}
+
+// El operador Spread [...] crea una copia exacta e independiente del Array base para usarlo en los filtros
+let lineasInvestigacionFiltradas = [...lineasInvestigacionBase];
 
 
 const renderizarTabla = () => {
@@ -75,24 +86,34 @@ const renderizarTabla = () => {
     const sinResultados = document.getElementById('sin-resultados');
     if (sinResultados) sinResultados.classList.add('d-none');
 
+    /**
+     * EXPLICACIÓN - Paginación con .slice():
+     * .slice(inicio, fin) extrae una porción del Array sin modificar el original.
+     * Si estamos en la página 2:
+     * inicio = (2 - 1) * 5 = 5.   fin = 5 + 5 = 10.
+     * Extraerá los índices del 5 al 9 (el índice 'fin' no se incluye), mostrando exactamente 5 registros.
+     */
     const inicio = (paginaActual - 1) * REGISTROS_POR_PAGINA;
     const fin = inicio + REGISTROS_POR_PAGINA;
-    const registrosPagina = lineasInvestigacionFiltradas
-    .slice(inicio, fin);
+    const registrosPagina = lineasInvestigacionFiltradas.slice(inicio, fin);
 
     registrosPagina.forEach(registro => {
+        /**
+         * EXPLICACIÓN - Inyección de Objetos en HTML:
+         * JSON.stringify(registro) convierte el objeto JS en un string de texto: '{"id":1,"nombre":"IA"}'
+         * .replace(/"/g, '&quot;') busca globalmente (/g) todas las comillas dobles (") y las cambia por '&quot;'.
+         * Esto evita que las comillas del objeto rompan las comillas del atributo `onclick=""` del HTML.
+         */
         const fila = `
         <tr>
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            
-              <td>
+            <td>
                  <button class="btn btn-danger" data-roles="admin" title="Eliminar" onclick="mostrarModalEliminar(${JSON.stringify(registro).replace(/"/g, '&quot;')})">
                         <i class="fas fa-trash"></i>
-                    </button>
+                 </button>
             </td>
         </tr>
-        
         `;
         tabla.innerHTML += fila;
     });
@@ -106,6 +127,7 @@ const renderizarPaginacion = () => {
     if (!paginacion) return;
 
     paginacion.innerHTML = '';
+    // Math.ceil() redondea siempre hacia arriba el resultado para asegurar que si hay por ejemplo 6 registros, use 2 páginas.
     const totalPaginas = Math.ceil(lineasInvestigacionFiltradas.length / REGISTROS_POR_PAGINA);
 
     if (totalPaginas <= 1) return;
@@ -139,23 +161,22 @@ const cambiarPagina = (nuevaPagina) => {
     if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
         paginaActual = nuevaPagina;
         renderizarTabla();
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0); // Desplaza la pantalla hacia arriba automáticamente
     }
 };
 
 // Búsqueda
 const aplicarBusqueda = () => {
-    const busqueda = document.getElementById('buscar').value.toLowerCase();
-    lineasInvestigacionFiltradas= lineasInvestigacion.filter(u => 
+    const busqueda = document.getElementById('buscar').value.toLowerCase()
+    lineasInvestigacionFiltradas = lineasInvestigacionBase.filter(u =>  // evalua cada elemento y busca si se incluye en la busqueda del usuario
         u.nombre.toLowerCase().includes(busqueda)
     );
-    paginaActual = 1;
+    paginaActual = 1; // Resetea a la primera página para ver los resultados desde el inicio
     renderizarTabla();
 };
 
 
-
-// Eliminar usuario
+// Eliminar Línea de Investigación
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -181,7 +202,7 @@ const eliminarModal = (registro) => {
     const modalBody = document.createElement('div');
     modalBody.className = 'modal-body';
     modalBody.innerHTML = `
-        <p class="mb-2"><strong>¿Deseas eliminar esta Linea de Investigacion?</strong></p>
+        <p class="mb-2"><strong>¿Deseas eliminar esta Línea de Investigación?</strong></p>
         <p class="text-muted small mb-0">${registro.nombre}</p>
     `;
 
@@ -221,18 +242,20 @@ const mostrarModalEliminar = (registro) => {
 
     const btnEliminar = modal.querySelector('.btn-danger');
     btnEliminar.addEventListener('click', function () {
-        lineasInvestigacion = lineasInvestigacion.filter(r => r.id !== registro.id);
-        lineasInvestigacionFiltradas = lineasInvestigacionFiltradas
-        .filter(r => r.id !== registro.id);
+      
+        lineasInvestigacionBase = lineasInvestigacionBase.filter(r => r.id !== registro.id);  // este fiilter lo que hace es una lista que incluya a todos los elementos excepto al que borramos 
+        lineasInvestigacionFiltradas = lineasInvestigacionFiltradas.filter(r => r.id !== registro.id);
+
+        // Guardamos la nueva lista en LocalStorage convirtiéndola en texto plano con JSON.stringify()
+        localStorage.setItem('lineasInvestigacion', JSON.stringify(lineasInvestigacionBase));
 
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Carrera eliminada correctamente');
+        alert('Línea de Investigación eliminada correctamente');
         modal.remove();
     });
 };
 
-// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
     const buscar = document.getElementById('buscar');
     if (buscar) buscar.addEventListener('input', aplicarBusqueda);
@@ -243,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Modal para crear una area
+// Modal para crear una Línea de Investigación
 const crearModalAgregar = () => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -260,7 +283,7 @@ const crearModalAgregar = () => {
 
     const modalTitle = document.createElement('h5');
     modalTitle.className = 'modal-title';
-    modalTitle.textContent = 'Agregar Linea de Investigacion';
+    modalTitle.textContent = 'Agregar Línea de Investigación';
 
     const modalBtnCerrar = document.createElement('button');
     modalBtnCerrar.className = 'btn-close btn-close-white';
@@ -271,9 +294,8 @@ const crearModalAgregar = () => {
     modalBody.innerHTML = `
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Ej: Desarrollo">
+            <input type="text" class="form-control" id="nombre" placeholder="Ej: Desarrollo de Software">
         </div>
-        
     `;
 
     const modalFooter = document.createElement('div');
@@ -319,24 +341,23 @@ const mostrarModalAgregar = () => {
             return;
         }
 
-        // Generar nuevo ID
-        const nuevoId = Math.max(...lineasInvestigacion.map(t => t.id), 0) + 1;
-
-        // Crear nuevo registro
+       
+        const nuevoId = Math.max(...lineasInvestigacionBase.map(t => t.id), 0) + 1; // esto se aumentar con el math.max en base al ultimo id y lo que hace es sumarle 1 
         const nuevoRegistro = {
             id: nuevoId,
             nombre: nombre,
         };
 
-        // Agregar a la lista
-        lineasInvestigacion.push(nuevoRegistro);
-        lineasInvestigacionFiltradas = [... lineasInvestigacion];
+        // .push() inserta el nuevo objeto al final del Array en memoria
+        lineasInvestigacionBase.push(nuevoRegistro);
+        lineasInvestigacionFiltradas = [...lineasInvestigacionBase];
 
-        // Cerrar modal
+        // Guardamos permanentemente la lista actualizada convirtiéndola en JSON
+        localStorage.setItem('lineasInvestigacion', JSON.stringify(lineasInvestigacionBase));
+
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Carrera agregada correctamente');
+        alert('Línea de Investigación agregada correctamente');
         modal.remove();
     });
 };
-

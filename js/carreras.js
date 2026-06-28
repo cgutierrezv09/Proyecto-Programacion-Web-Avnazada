@@ -1,4 +1,7 @@
+
+
 let rolActual = localStorage.getItem('rol') || 'admin';
+
 const aplicarRol = (rol) => {
     const elementos = document.querySelectorAll('[data-roles]');
 
@@ -14,8 +17,8 @@ const aplicarRol = (rol) => {
         }
     });
 };
-document.addEventListener('DOMContentLoaded', function () {
 
+document.addEventListener('DOMContentLoaded', function () {
     // Función para mostrar el rol actual
     const mostrarRolActual = (rol) => {
         const rolActualEl = document.querySelector('.rol-actual');
@@ -29,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const btnAdmin = document.getElementById('btn-admin');
- 
-
-    // Event listeners para los botones de rol
 
     if (btnAdmin) {
         btnAdmin.addEventListener('click', function () {
@@ -44,8 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
-
     // Aplicar el rol al cargar
     aplicarRol(rolActual);
     mostrarRolActual(rolActual);
@@ -53,9 +51,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+// GESTIÓN DE LOCALSTORAGE PARA CARRERAS
+
+
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;
-let carrerasFiltradas = [...carreras];
+
+// 1. Inicializar la lista obteniendo los datos guardados de LocalStorage.
+// Si está vacío, usa el arreglo 'carreras' global existente por defecto.
+let carrerasBase = JSON.parse(localStorage.getItem('carreras')) || (typeof carreras !== 'undefined' ? carreras : []);
+
+// Si no existía la clave en LocalStorage, la guardamos por primera vez
+if (!localStorage.getItem('carreras')) {
+    localStorage.setItem('carreras', JSON.stringify(carrerasBase));
+}
+
+let carrerasFiltradas = [...carrerasBase];
 
 
 const renderizarTabla = () => {
@@ -84,14 +95,12 @@ const renderizarTabla = () => {
         <tr>
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            
-              <td>
+            <td>
                  <button class="btn btn-danger" data-roles="admin" title="Eliminar" onclick="mostrarModalEliminar(${JSON.stringify(registro).replace(/"/g, '&quot;')})">
                         <i class="fas fa-trash"></i>
-                    </button>
+                 </button>
             </td>
         </tr>
-        
         `;
         tabla.innerHTML += fila;
     });
@@ -145,7 +154,7 @@ const cambiarPagina = (nuevaPagina) => {
 // Búsqueda
 const aplicarBusqueda = () => {
     const busqueda = document.getElementById('buscar').value.toLowerCase();
-    carrerasFiltradas = carreras.filter(u => 
+    carrerasFiltradas = carrerasBase.filter(u => 
         u.nombre.toLowerCase().includes(busqueda)
     );
     paginaActual = 1;
@@ -153,8 +162,7 @@ const aplicarBusqueda = () => {
 };
 
 
-
-// Eliminar usuario
+// Eliminar Carrera (Persistente en LocalStorage)
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -220,8 +228,12 @@ const mostrarModalEliminar = (registro) => {
 
     const btnEliminar = modal.querySelector('.btn-danger');
     btnEliminar.addEventListener('click', function () {
-        carreras = carreras.filter(r => r.id !== registro.id);
+        // Filtrar de las colecciones en memoria
+        carrerasBase = carrerasBase.filter(r => r.id !== registro.id);
         carrerasFiltradas = carrerasFiltradas.filter(r => r.id !== registro.id);
+
+        // ACTUALIZAR LOCALSTORAGE AL ELIMINAR
+        localStorage.setItem('carreras', JSON.stringify(carrerasBase));
 
         modalBootstrap.hide();
         renderizarTabla();
@@ -241,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Modal para crear una area
+// Modal para crear una Carrera (Persistente en LocalStorage)
 const crearModalAgregar = () => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -258,7 +270,7 @@ const crearModalAgregar = () => {
 
     const modalTitle = document.createElement('h5');
     modalTitle.className = 'modal-title';
-    modalTitle.textContent = 'Agregar Tipo de Producción';
+    modalTitle.textContent = 'Agregar Carrera';
 
     const modalBtnCerrar = document.createElement('button');
     modalBtnCerrar.className = 'btn-close btn-close-white';
@@ -269,9 +281,8 @@ const crearModalAgregar = () => {
     modalBody.innerHTML = `
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Ej: Administracion de empresas">
+            <input type="text" class="form-control" id="nombre" placeholder="Ej: Administración de Empresas">
         </div>
-        
     `;
 
     const modalFooter = document.createElement('div');
@@ -317,24 +328,24 @@ const mostrarModalAgregar = () => {
             return;
         }
 
-        // Generar nuevo ID
-        const nuevoId = Math.max(...carreras.map(t => t.id), 0) + 1;
+        // Generar nuevo ID de forma dinámica usando el arreglo persistido
+        const nuevoId = Math.max(...carrerasBase.map(t => t.id), 0) + 1;
 
-        // Crear nuevo registro
         const nuevoRegistro = {
             id: nuevoId,
             nombre: nombre,
         };
 
-        // Agregar a la lista
-        carreras.push(nuevoRegistro);
-        carrerasFiltradas = [... carreras];
+        // Agregar a la lista local en memoria
+        carrerasBase.push(nuevoRegistro);
+        carrerasFiltradas = [...carrerasBase];
 
-        // Cerrar modal
+        // GUARDAR EN LOCALSTORAGE AL AGREGAR
+        localStorage.setItem('carreras', JSON.stringify(carrerasBase));
+
         modalBootstrap.hide();
         renderizarTabla();
         alert('Carrera agregada correctamente');
         modal.remove();
     });
 };
-

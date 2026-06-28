@@ -1,4 +1,7 @@
+
+
 let rolActual = localStorage.getItem('rol') || 'admin';
+
 const aplicarRol = (rol) => {
     const elementos = document.querySelectorAll('[data-roles]');
 
@@ -14,12 +17,12 @@ const aplicarRol = (rol) => {
         }
     });
 };
-document.addEventListener('DOMContentLoaded', function () {
 
+document.addEventListener('DOMContentLoaded', function () {
     // Función para mostrar el rol actual
     const mostrarRolActual = (rol) => {
         const rolActualEl = document.querySelector('.rol-actual');
-        if (!rolActualEl) return; // Evita error si no existe el elemento
+        if (!rolActualEl) return; 
         
         const roles = {
             'admin': 'Administrador',
@@ -29,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const btnAdmin = document.getElementById('btn-admin');
- 
-
-    // Event listeners para los botones de rol
 
     if (btnAdmin) {
         btnAdmin.addEventListener('click', function () {
@@ -44,8 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
-
     // Aplicar el rol al cargar
     aplicarRol(rolActual);
     mostrarRolActual(rolActual);
@@ -53,9 +51,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+// GESTIÓN DE LOCALSTORAGE PARA TIPOS DE PRODUCCIÓN
+
+
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;
-let producionFiltrada = [...tiposProduccion];
+
+// 1. Inicializar la lista obteniendo de LocalStorage. 
+// Si está vacío, usa el arreglo 'tiposProduccion' global existente por defecto.
+let tiposProduccionBase = JSON.parse(localStorage.getItem('tiposProduccion')) || (typeof tiposProduccion !== 'undefined' ? tiposProduccion : []);
+
+// Si no existía en LocalStorage, lo guardamos por primera vez
+if (!localStorage.getItem('tiposProduccion')) {
+    localStorage.setItem('tiposProduccion', JSON.stringify(tiposProduccionBase));
+}
+
+let producionFiltrada = [...tiposProduccionBase];
 
 
 const renderizarTabla = () => {
@@ -85,14 +96,12 @@ const renderizarTabla = () => {
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
             <td>${registro.descripcion}</td>
-            
-              <td>
+            <td>
                  <button class="btn btn-danger" data-roles="admin" title="Eliminar" onclick="mostrarModalEliminar(${JSON.stringify(registro).replace(/"/g, '&quot;')})">
                         <i class="fas fa-trash"></i>
-                    </button>
+                 </button>
             </td>
         </tr>
-        
         `;
         tabla.innerHTML += fila;
     });
@@ -146,7 +155,7 @@ const cambiarPagina = (nuevaPagina) => {
 // Búsqueda
 const aplicarBusqueda = () => {
     const busqueda = document.getElementById('buscar').value.toLowerCase();
-    producionFiltrada = tiposProduccion.filter(u => 
+    producionFiltrada = tiposProduccionBase.filter(u => 
         u.nombre.toLowerCase().includes(busqueda)
     );
     paginaActual = 1;
@@ -154,8 +163,7 @@ const aplicarBusqueda = () => {
 };
 
 
-
-// Eliminar usuario (simulado)
+// Eliminar tipo de producción (Con LocalStorage)
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -181,7 +189,7 @@ const eliminarModal = (registro) => {
     const modalBody = document.createElement('div');
     modalBody.className = 'modal-body';
     modalBody.innerHTML = `
-        <p class="mb-2"><strong>¿Deseas eliminar este tipo de produccion?</strong></p>
+        <p class="mb-2"><strong>¿Deseas eliminar este tipo de producción?</strong></p>
         <p class="text-muted small mb-0">${registro.nombre}</p>
     `;
 
@@ -221,12 +229,16 @@ const mostrarModalEliminar = (registro) => {
 
     const btnEliminar = modal.querySelector('.btn-danger');
     btnEliminar.addEventListener('click', function () {
-        tiposProduccion = tiposProduccion.filter(r => r.id !== registro.id);
+        // Filtrar de la lista en memoria
+        tiposProduccionBase = tiposProduccionBase.filter(r => r.id !== registro.id);
         producionFiltrada = producionFiltrada.filter(r => r.id !== registro.id);
+
+        // ACTUALIZAR LOCALSTORAGE AL ELIMINAR
+        localStorage.setItem('tiposProduccion', JSON.stringify(tiposProduccionBase));
 
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Usuario eliminado correctamente');
+        alert('Producción eliminada correctamente');
         modal.remove();
     });
 };
@@ -242,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Modal para crear tipo de producción
+// Modal para crear tipo de producción (Con LocalStorage)
 const crearModalAgregar = () => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -322,25 +334,25 @@ const mostrarModalAgregar = () => {
             return;
         }
 
-        // Generar nuevo ID
-        const nuevoId = Math.max(...tiposProduccion.map(t => t.id), 0) + 1;
+        // Generar nuevo ID dinámicamente usando los datos persistidos
+        const nuevoId = Math.max(...tiposProduccionBase.map(t => t.id), 0) + 1;
 
-        // Crear nuevo registro
         const nuevoRegistro = {
             id: nuevoId,
             nombre: nombre,
             descripcion: descripcion
         };
 
-        // Agregar a la lista
-        tiposProduccion.push(nuevoRegistro);
-        producionFiltrada = [...tiposProduccion];
+        // Agregar a la lista local
+        tiposProduccionBase.push(nuevoRegistro);
+        producionFiltrada = [...tiposProduccionBase];
 
-        // Cerrar modal
+        // GUARDAR EN LOCALSTORAGE AL AGREGAR
+        localStorage.setItem('tiposProduccion', JSON.stringify(tiposProduccionBase));
+
         modalBootstrap.hide();
         renderizarTabla();
         alert('Tipo de producción agregado correctamente');
         modal.remove();
     });
 };
-

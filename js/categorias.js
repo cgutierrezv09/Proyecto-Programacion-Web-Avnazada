@@ -1,4 +1,7 @@
+
+
 let rolActual = localStorage.getItem('rol') || 'admin';
+
 const aplicarRol = (rol) => {
     const elementos = document.querySelectorAll('[data-roles]');
 
@@ -14,8 +17,8 @@ const aplicarRol = (rol) => {
         }
     });
 };
-document.addEventListener('DOMContentLoaded', function () {
 
+document.addEventListener('DOMContentLoaded', function () {
     // Función para mostrar el rol actual
     const mostrarRolActual = (rol) => {
         const rolActualEl = document.querySelector('.rol-actual');
@@ -29,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const btnAdmin = document.getElementById('btn-admin');
- 
-
-    // Event listeners para los botones de rol
 
     if (btnAdmin) {
         btnAdmin.addEventListener('click', function () {
@@ -44,18 +44,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
-
     // Aplicar el rol al cargar
     aplicarRol(rolActual);
     mostrarRolActual(rolActual);
 });
 
 
+// ==============================================================
+// GESTIÓN DE LOCALSTORAGE PARA CATEGORÍAS
+// ==============================================================
 
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;
-let categoriasFiltradas = [...categorias];
+
+// 1. Inicializar la lista obteniendo de LocalStorage.
+// Si está vacío, usa el arreglo 'categorias' global existente por defecto (ej. de data.js).
+let categoriasBase = JSON.parse(localStorage.getItem('categorias')) || (typeof categorias !== 'undefined' ? categorias : []);
+
+// Si no existía en LocalStorage, lo guardamos por primera vez
+if (!localStorage.getItem('categorias')) {
+    localStorage.setItem('categorias', JSON.stringify(categoriasBase));
+}
+
+let categoriasFiltradas = [...categoriasBase];
 
 
 const renderizarTabla = () => {
@@ -84,14 +95,12 @@ const renderizarTabla = () => {
         <tr>
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            
-              <td>
+            <td>
                  <button class="btn btn-danger" data-roles="admin" title="Eliminar" onclick="mostrarModalEliminar(${JSON.stringify(registro).replace(/"/g, '&quot;')})">
                         <i class="fas fa-trash"></i>
-                    </button>
+                 </button>
             </td>
         </tr>
-        
         `;
         tabla.innerHTML += fila;
     });
@@ -145,7 +154,7 @@ const cambiarPagina = (nuevaPagina) => {
 // Búsqueda
 const aplicarBusqueda = () => {
     const busqueda = document.getElementById('buscar').value.toLowerCase();
-    categoriasFiltradas = categorias.filter(u => 
+    categoriasFiltradas = categoriasBase.filter(u => 
         u.nombre.toLowerCase().includes(busqueda)
     );
     paginaActual = 1;
@@ -153,8 +162,7 @@ const aplicarBusqueda = () => {
 };
 
 
-
-// Eliminar usuario (simulado)
+// Eliminar Categoría (Persistente en LocalStorage)
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -180,7 +188,7 @@ const eliminarModal = (registro) => {
     const modalBody = document.createElement('div');
     modalBody.className = 'modal-body';
     modalBody.innerHTML = `
-        <p class="mb-2"><strong>¿Deseas eliminar esta Categoria?</strong></p>
+        <p class="mb-2"><strong>¿Deseas eliminar esta Categoría?</strong></p>
         <p class="text-muted small mb-0">${registro.nombre}</p>
     `;
 
@@ -220,12 +228,16 @@ const mostrarModalEliminar = (registro) => {
 
     const btnEliminar = modal.querySelector('.btn-danger');
     btnEliminar.addEventListener('click', function () {
-        categorias = categorias.filter(r => r.id !== registro.id);
+        // Filtrar las colecciones en memoria
+        categoriasBase = categoriasBase.filter(r => r.id !== registro.id);
         categoriasFiltradas = categoriasFiltradas.filter(r => r.id !== registro.id);
+
+        // ACTUALIZAR LOCALSTORAGE AL ELIMINAR
+        localStorage.setItem('categorias', JSON.stringify(categoriasBase));
 
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Categoria eliminado correctamente');
+        alert('Categoría eliminada correctamente');
         modal.remove();
     });
 };
@@ -241,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Modal para crear una categoria 
+// Modal para crear una categoría (Persistente en LocalStorage)
 const crearModalAgregar = () => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -258,7 +270,7 @@ const crearModalAgregar = () => {
 
     const modalTitle = document.createElement('h5');
     modalTitle.className = 'modal-title';
-    modalTitle.textContent = 'Agregar Tipo de Producción';
+    modalTitle.textContent = 'Agregar Categoría';
 
     const modalBtnCerrar = document.createElement('button');
     modalBtnCerrar.className = 'btn-close btn-close-white';
@@ -269,9 +281,8 @@ const crearModalAgregar = () => {
     modalBody.innerHTML = `
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Ej: Tesis">
+            <input type="text" class="form-control" id="nombre" placeholder="Ej: Desarrollo web">
         </div>
-        
     `;
 
     const modalFooter = document.createElement('div');
@@ -317,23 +328,24 @@ const mostrarModalAgregar = () => {
             return;
         }
 
-        // Generar nuevo ID
-        const nuevoId = Math.max(...categorias.map(t => t.id), 0) + 1;
+        // Generar nuevo ID de forma segura usando la lista persistida
+        const nuevoId = Math.max(...categoriasBase.map(t => t.id), 0) + 1;
 
-        // Crear nuevo registro
         const nuevoRegistro = {
             id: nuevoId,
             nombre: nombre,
         };
 
-        // Agregar a la lista
-        categorias.push(nuevoRegistro);
-        categoriasFiltradas = [...categorias];
+        // Agregar a la lista local
+        categoriasBase.push(nuevoRegistro);
+        categoriasFiltradas = [...categoriasBase];
 
-        // Cerrar modal
+        // GUARDAR EN LOCALSTORAGE AL AGREGAR
+        localStorage.setItem('categorias', JSON.stringify(categoriasBase));
+
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Categoria agregada correctamente');
+        alert('Categoría agregada correctamente');
         modal.remove();
     });
 };

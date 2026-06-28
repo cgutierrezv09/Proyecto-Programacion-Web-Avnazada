@@ -246,65 +246,7 @@ const cambiarPagina = (nuevaPagina) => {
 };
 
 
-//registro 
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    const formulario = document.getElementById("form-registro");
-
-    if (!formulario) return;
-
-    formulario.addEventListener("submit", function (e) {
-
-        e.preventDefault();
-
-        const nuevoRegistro = {
-
-            id: Date.now(),
-
-            titulo: document.getElementById("titulo").value,
-
-            autor: document.getElementById("autor").value,
-
-            tipo: document.getElementById("tipo").value,
-
-            carrera: document.getElementById("carrera").value,
-
-            area: document.getElementById("area").value,
-
-            año: parseInt(document.getElementById("año").value),
-
-            resumen: document.getElementById("resumen").value,
-
-            documento: document.getElementById("documento").files[0]?.name || "Sin PDF",
-
-            tecnologias: document
-                .getElementById("tecnologias")
-                .value
-                .split(",")
-                .map(t => t.trim()),
-
-            contenido: "Documento registrado por el usuario."
-        };
-
-        // Obtener registros existentes
-        let registros = JSON.parse(localStorage.getItem("registros")) || [];
-
-        // Agregar el nuevo
-        registros.push(nuevoRegistro);
-
-        // Guardar nuevamente
-        localStorage.setItem("registros", JSON.stringify(registros));
-
-        alert("Producción académica registrada correctamente.");
-
-        formulario.reset();
-
-        document.getElementById("file-name").textContent = "";
-
-    });
-
-});
 
 
 // Aplicar filtros

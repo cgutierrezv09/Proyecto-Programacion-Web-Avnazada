@@ -1,4 +1,9 @@
+/**
+ * Gestión de Roles y Áreas de Conocimiento con Persistencia en LocalStorage
+ */
+
 let rolActual = localStorage.getItem('rol') || 'admin';
+
 const aplicarRol = (rol) => {
     const elementos = document.querySelectorAll('[data-roles]');
 
@@ -14,8 +19,8 @@ const aplicarRol = (rol) => {
         }
     });
 };
-document.addEventListener('DOMContentLoaded', function () {
 
+document.addEventListener('DOMContentLoaded', function () {
     // Función para mostrar el rol actual
     const mostrarRolActual = (rol) => {
         const rolActualEl = document.querySelector('.rol-actual');
@@ -29,9 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const btnAdmin = document.getElementById('btn-admin');
- 
-
-    // Event listeners para los botones de rol
 
     if (btnAdmin) {
         btnAdmin.addEventListener('click', function () {
@@ -44,18 +46,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-  
-
     // Aplicar el rol al cargar
     aplicarRol(rolActual);
     mostrarRolActual(rolActual);
 });
 
 
+// ==============================================================
+// GESTIÓN DE LOCALSTORAGE PARA ÁREAS DE CONOCIMIENTO
+// ==============================================================
 
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;
-let areasFiltradas = [...areasConocimiento];
+
+// 1. Inicializar la lista obteniendo los datos guardados de LocalStorage.
+// Si está vacío, usa el arreglo 'areasConocimiento' global existente por defecto (ej. de data.js).
+let areasConocimientoBase = JSON.parse(localStorage.getItem('areasConocimiento')) || (typeof areasConocimiento !== 'undefined' ? areasConocimiento : []);
+
+// Si no existía la clave en LocalStorage, la guardamos por primera vez
+if (!localStorage.getItem('areasConocimiento')) {
+    localStorage.setItem('areasConocimiento', JSON.stringify(areasConocimientoBase));
+}
+
+let areasFiltradas = [...areasConocimientoBase];
 
 
 const renderizarTabla = () => {
@@ -84,14 +97,12 @@ const renderizarTabla = () => {
         <tr>
             <td>${registro.id}</td>
             <td>${registro.nombre}</td>
-            
-              <td>
+            <td>
                  <button class="btn btn-danger" data-roles="admin" title="Eliminar" onclick="mostrarModalEliminar(${JSON.stringify(registro).replace(/"/g, '&quot;')})">
                         <i class="fas fa-trash"></i>
-                    </button>
+                 </button>
             </td>
         </tr>
-        
         `;
         tabla.innerHTML += fila;
     });
@@ -145,7 +156,7 @@ const cambiarPagina = (nuevaPagina) => {
 // Búsqueda
 const aplicarBusqueda = () => {
     const busqueda = document.getElementById('buscar').value.toLowerCase();
-    areasFiltradas = areasConocimiento.filter(u => 
+    areasFiltradas = areasConocimientoBase.filter(u => 
         u.nombre.toLowerCase().includes(busqueda)
     );
     paginaActual = 1;
@@ -153,8 +164,7 @@ const aplicarBusqueda = () => {
 };
 
 
-
-// Eliminar usuario (simulado)
+// Eliminar Área de conocimiento (Persistente en LocalStorage)
 const eliminarModal = (registro) => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -180,7 +190,7 @@ const eliminarModal = (registro) => {
     const modalBody = document.createElement('div');
     modalBody.className = 'modal-body';
     modalBody.innerHTML = `
-        <p class="mb-2"><strong>¿Deseas eliminar esta Area de conocimiento?</strong></p>
+        <p class="mb-2"><strong>¿Deseas eliminar esta Área de conocimiento?</strong></p>
         <p class="text-muted small mb-0">${registro.nombre}</p>
     `;
 
@@ -220,12 +230,16 @@ const mostrarModalEliminar = (registro) => {
 
     const btnEliminar = modal.querySelector('.btn-danger');
     btnEliminar.addEventListener('click', function () {
-        areasConocimiento = areasConocimiento.filter(r => r.id !== registro.id);
+        // Filtrar de las colecciones en memoria
+        areasConocimientoBase = areasConocimientoBase.filter(r => r.id !== registro.id);
         areasFiltradas = areasFiltradas.filter(r => r.id !== registro.id);
+
+        // ACTUALIZAR LOCALSTORAGE AL ELIMINAR
+        localStorage.setItem('areasConocimiento', JSON.stringify(areasConocimientoBase));
 
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Area eliminada correctamente');
+        alert('Área eliminada correctamente');
         modal.remove();
     });
 };
@@ -241,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Modal para crear una area
+// Modal para crear un Área de conocimiento (Persistente en LocalStorage)
 const crearModalAgregar = () => {
     const modal = document.createElement('div');
     modal.className = 'modal';
@@ -258,7 +272,7 @@ const crearModalAgregar = () => {
 
     const modalTitle = document.createElement('h5');
     modalTitle.className = 'modal-title';
-    modalTitle.textContent = 'Agregar Tipo de Producción';
+    modalTitle.textContent = 'Agregar Área de conocimiento';
 
     const modalBtnCerrar = document.createElement('button');
     modalBtnCerrar.className = 'btn-close btn-close-white';
@@ -271,7 +285,6 @@ const crearModalAgregar = () => {
             <label for="nombre" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="nombre" placeholder="Ej: Ciberseguridad">
         </div>
-        
     `;
 
     const modalFooter = document.createElement('div');
@@ -317,24 +330,24 @@ const mostrarModalAgregar = () => {
             return;
         }
 
-        // Generar nuevo ID
-        const nuevoId = Math.max(...areasConocimiento.map(t => t.id), 0) + 1;
+        // Generar nuevo ID de forma dinámica usando el arreglo persistido
+        const nuevoId = Math.max(...areasConocimientoBase.map(t => t.id), 0) + 1;
 
-        // Crear nuevo registro
         const nuevoRegistro = {
             id: nuevoId,
             nombre: nombre,
         };
 
-        // Agregar a la lista
-        areasConocimiento.push(nuevoRegistro);
-        areasFiltradas = [...areasConocimiento];
+        // Agregar a la lista local en memoria
+        areasConocimientoBase.push(nuevoRegistro);
+        areasFiltradas = [...areasConocimientoBase];
 
-        // Cerrar modal
+        // GUARDAR EN LOCALSTORAGE AL AGREGAR
+        localStorage.setItem('areasConocimiento', JSON.stringify(areasConocimientoBase));
+
         modalBootstrap.hide();
         renderizarTabla();
-        alert('Area de conocimiento agregada correctamente');
+        alert('Área de conocimiento agregada correctamente');
         modal.remove();
     });
 };
-
