@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// ==============================================================
+
 // GESTIÓN DE LOCALSTORAGE PARA CATEGORÍAS
-// ==============================================================
+
 
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;

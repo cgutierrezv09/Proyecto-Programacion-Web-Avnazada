@@ -1,6 +1,4 @@
-/**
- * Gestión de Roles y Tecnologías con Persistencia en LocalStorage
- */
+
 
 let rolActual = localStorage.getItem('rol') || 'admin';
 
@@ -52,9 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// ==============================================================
+
 // GESTIÓN DE LOCALSTORAGE PARA TECNOLOGÍAS
-// ==============================================================
+
 
 const REGISTROS_POR_PAGINA = 5;
 let paginaActual = 1;

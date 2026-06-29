@@ -295,7 +295,8 @@ let produccionAcademica = [
         resumen: 'Metodología para identificar, priorizar y resolver deuda técnica en aplicaciones legacy.',
         contenido: 'Framework con métricas de calidad de código y plan gradual de refactorización sin afectar producción.',
         estado: 'borrador'
-    }
+    },
+    
 ];
 
 //Calcula indicadores 

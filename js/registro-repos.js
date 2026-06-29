@@ -47,10 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
     mostrarRolActual(rolActual);
 });
 
-/**
- * js/registro-repos.js
- * Validación completa y guardado en LocalStorage del Formulario de Registro
- */
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("form-registro");
@@ -68,9 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const fileDocumento = document.getElementById("documento");
     const divFileName = document.getElementById("file-name");
 
-    // ==========================================
+   
     // 1. FUNCIONES DE VALIDACIÓN INDEPENDIENTES
-    // ==========================================
+   
 
     function validarAutor() {
         const errorContainer = document.getElementById("error-autor");
@@ -209,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function validarDocumento() {
         const errorContainer = document.getElementById("error-documento");
         const archivo = fileDocumento.files[0];
-        const tamañoMaximo = 5 * 1024 * 1024; // 5MB
+        const tamañoMaximo = 5 * 1024 * 1024; 
 
         if (!archivo) {
             errorContainer.textContent = "Debe adjuntar un documento PDF.";
@@ -231,9 +228,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
     }
 
-    // ==========================================
+   
     // 2. EVENTOS EN TIEMPO REAL
-    // ==========================================
+   
     txtAutor.addEventListener("input", validarAutor);
     txtTitulo.addEventListener("input", validarTitulo);
     selTipo.addEventListener("change", validarTipo);
@@ -252,9 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
         validarDocumento();
     });
 
-    // ==========================================
+   
     // 3. EVENTO SUBMIT (VALIDACIÓN + GUARDADO)
-    // ==========================================
+   
     form.addEventListener("submit", function (e) {
         // Detener siempre el flujo al inicio para analizar el estado de los datos
         e.preventDefault();

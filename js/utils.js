@@ -627,3 +627,30 @@ function abrirModalEditar(registro) {
     const modalEditar = new bootstrap.Modal(modalElement);
     modalEditar.show();
 }
+
+
+
+
+const inputBuscar = document.getElementById("buscarRepositorio");
+
+inputBuscar.addEventListener("input", buscarCards);
+
+function buscarCards() {
+
+    const texto = inputBuscar.value.toLowerCase().trim();
+
+    const cards = document.querySelectorAll(".container.mt-5.mb-5 .card");
+
+    cards.forEach(card => {
+
+        const contenido = card.innerText.toLowerCase();
+
+        if (contenido.includes(texto)) {
+            card.style.display = "";
+        } else {
+            card.style.display = "none";
+        }
+
+    });
+
+}
