@@ -594,9 +594,9 @@ function abrirModalEditar(registro) {
         // Guardar la lista actualizada en LocalStorage
         localStorage.setItem("registros", JSON.stringify(registros));
 
-        // Sincronizar arreglos en memoria RAM para que la tabla refleje el cambio de inmediato
+        // Sincronizar arreglos  para que la tabla refleje el cambio de inmediato
         if (typeof produccionAcademica !== 'undefined') {
-            const idxOriginal = produccionAcademica.findIndex(r => Number(r.id) === id);
+            const idxOriginal = produccionAcademica.findIndex(r => Number(r.id) === id); // busca el id y lo acutauliza 
             if (idxOriginal !== -1) {
                 produccionAcademica[idxOriginal] = { ...produccionAcademica[idxOriginal], ...registroActualizado };
             } else {
@@ -605,7 +605,7 @@ function abrirModalEditar(registro) {
         }
         
         if (typeof registrosFiltrados !== 'undefined') {
-            const idxFiltrados = registrosFiltrados.findIndex(r => Number(r.id) === id);
+            const idxFiltrados = registrosFiltrados.findIndex(r => Number(r.id) === id); //busca el id y los actualiza w
             if (idxFiltrados !== -1) {
                 registrosFiltrados[idxFiltrados] = { ...registrosFiltrados[idxFiltrados], ...registroActualizado };
             } else {
@@ -631,26 +631,3 @@ function abrirModalEditar(registro) {
 
 
 
-const inputBuscar = document.getElementById("buscarRepositorio");
-
-inputBuscar.addEventListener("input", buscarCards);
-
-function buscarCards() {
-
-    const texto = inputBuscar.value.toLowerCase().trim();
-
-    const cards = document.querySelectorAll(".container.mt-5.mb-5 .card");
-
-    cards.forEach(card => {
-
-        const contenido = card.innerText.toLowerCase();
-
-        if (contenido.includes(texto)) {
-            card.style.display = "";
-        } else {
-            card.style.display = "none";
-        }
-
-    });
-
-}
